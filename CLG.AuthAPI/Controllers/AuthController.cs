@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CLG.AuthAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/auth")]
     public class AuthController : Controller
     {
         private readonly IMediator _mediator;
@@ -36,6 +36,14 @@ namespace CLG.AuthAPI.Controllers
                 await _mediator.Publish(new ErrorNotification { Exception = ex.Message, StackError = ex.StackTrace });
                 return BadRequest();
             }
+        }
+
+        [HttpPost]
+        [Route("get")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Get([FromBody] SignInRequest command)
+        {
+            return Ok(new {message = "foi" });
         }
     }
 }
