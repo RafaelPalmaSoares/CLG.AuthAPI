@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddMediatR(typeof(Program));
-builder.Services.AddSingleton<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IRepository<User>, UserRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -23,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnection")));
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -80,7 +81,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-//SeedDatabase();
+SeedDatabase();
 
 app.UseCors("CorsPolicy");
 
@@ -97,6 +98,5 @@ void SeedDatabase()
     {
         var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
         dbInitializer.Initialize();
-        dbInitializer.SeedData();
     }
 }

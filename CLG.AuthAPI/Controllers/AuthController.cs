@@ -38,12 +38,5 @@ namespace CLG.AuthAPI.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("get")]
-        [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Get([FromBody] SignInRequest command)
-        {
-            return Ok(new {message = "foi" });
-        }
     }
 }

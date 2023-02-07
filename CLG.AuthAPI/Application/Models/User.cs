@@ -1,4 +1,6 @@
-﻿namespace CLG.AuthAPI.Application.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CLG.AuthAPI.Application.Models
 {
     public class User
     {

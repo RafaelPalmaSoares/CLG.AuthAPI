@@ -1,15 +1,32 @@
-﻿namespace CLG.AuthAPI.Application.Repositories
+﻿using CLG.AuthAPI.Application.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace CLG.AuthAPI.Application.Repositories
 {
     public class DbInitializer : IDbInitializer
     {
-        public void Initialize()
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public DbInitializer(IServiceScopeFactory scopeFactory, Context context)
         {
-            throw new NotImplementedException();
+            _scopeFactory = scopeFactory;
         }
 
-        public void SeedData()
+        public void Initialize()
         {
-            throw new NotImplementedException();
+            using (var serviceScope = _scopeFactory.CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<Context>())
+                {
+                    context.Database.EnsureCreated();
+
+                    if(!context.Users.ToList().Any())
+                    {
+                        context.Add(new User { Id = Guid.NewGuid(), Username = "admin", Password = "admin" });
+                        context.SaveChanges();
+                    }
+                }
+            }
         }
     }
 }
